@@ -27,11 +27,13 @@ router.get('/api/get-a-boat', async (req, res) => {
 })
 
 router.post('/api/create-boat', async (req, res) => {
-    const { name, status_id } = req.body
-    pool.query(
+    const { name } = req.body
+    // get first status id for default new boat status
+    const { rows: status } = await pool.query(`select id from status limit 1;`)
+    await pool.query(
         `INSERT INTO boats(name, status_id)
-        VALUES($1, $2)`,
-        [name, status_id],
+        VALUES($1, $2) RETURNING *`,
+        [name, status[0].id],
         (err, data) => {
             if (err) return next(err)
             res.json(data.rows)
