@@ -24,6 +24,8 @@ const boatReducer = (state, action) => {
             })
         case 'ADD_BOAT':
             return [...state, ...action.boat]
+        case 'DELETE_BOAT':
+            return state.filter((boat) => boat.id !== action.id)
         default:
             throw new Error()
     }

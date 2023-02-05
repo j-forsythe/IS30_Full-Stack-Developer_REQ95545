@@ -84,6 +84,9 @@ const Swimlanes = ({ boats, dispatchBoats }) => {
                                                 >
                                                     {(provided, snapshot) => (
                                                         <Boat
+                                                            dispatchBoats={
+                                                                dispatchBoats
+                                                            }
                                                             data={boat}
                                                             innerRef={
                                                                 provided.innerRef
