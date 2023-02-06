@@ -1,0 +1,49 @@
+version: '3'
+services:
+    frontend:
+        container_name: ecocatch_tours
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        image: ecocatch_tours
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./client:/usr/src/app
+    database:
+        container_name: eco_database
+        image: postgres:latest
+        restart: always
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+            PGDATA: /var/lib/postgresql/data
+        ports:
+            - 35432:5432
+        volumes:
+            - ./db/data:/var/lib/postgresql/data
+            - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+    backend:
+        container_name: eco_server
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        image: eco_server
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_HOST: ${POSTGRES_HOST}
+            POSTGRES_PORT: ${POSTGRES_PORT}
+        ports:
+            - '4000:4000'
+        volumes:
+            - ./server:/usr/src/app
+        depends_on:
+            - database
