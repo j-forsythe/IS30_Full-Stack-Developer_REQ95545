@@ -4,7 +4,7 @@ CREATE TABLE status (
 );
 
 CREATE TABLE boats (
-    uid SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     status_id INT REFERENCES status(id)
 );
