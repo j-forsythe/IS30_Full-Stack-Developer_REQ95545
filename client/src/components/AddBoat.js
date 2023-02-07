@@ -14,14 +14,17 @@ import Box from '@mui/material/Box'
 const AddBoat = ({ dispatchBoats }) => {
     const [open, setOpen] = useState(false)
     const [boatName, setBoatName] = useState('')
+    const [submitAttempt, setSubmitAttempt] = useState(false)
 
     const handleOpen = () => {
         setOpen(true)
+        setSubmitAttempt(false)
     }
 
     const handleClose = () => {
         setOpen(false)
         setBoatName('')
+        setSubmitAttempt(false)
     }
 
     const createBoat = async (name) => {
@@ -38,6 +41,8 @@ const AddBoat = ({ dispatchBoats }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+        setSubmitAttempt(true)
+        if (!boatName) return
         let boat = await createBoat(boatName)
         dispatchBoats({ type: 'ADD_BOAT', boat })
         handleClose()
@@ -67,7 +72,7 @@ const AddBoat = ({ dispatchBoats }) => {
                 onClose={handleClose}
                 component="form"
                 onSubmit={handleSubmit}
-                validate
+                validate="true"
             >
                 <DialogTitle>Add new boat</DialogTitle>
                 <DialogContent>
@@ -83,6 +88,13 @@ const AddBoat = ({ dispatchBoats }) => {
                         max="255"
                         value={boatName}
                         onChange={(event) => setBoatName(event.target.value)}
+                        required
+                        error={boatName.length < 3 && submitAttempt}
+                        helperText={`${
+                            boatName.length < 3 && submitAttempt
+                                ? 'Must be at least 3 characters'
+                                : ''
+                        } ${boatName.length}/255`}
                     />
                 </DialogContent>
                 <DialogActions>
