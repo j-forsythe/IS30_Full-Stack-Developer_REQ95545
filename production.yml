@@ -6,7 +6,7 @@ services:
             context: ./client
             dockerfile: Dockerfile
         image: ecocatch_tours
-        command: sh -c "npm install && npm run start"
+        command: sh -c "npm install && npm run build"
         ports:
             - '3000:3000'
         volumes:
@@ -36,7 +36,7 @@ services:
             context: ./server
             dockerfile: Dockerfile
         image: eco_server
-        command: sh -c "npm install && npm run start"
+        command: sh -c "npm install && npm run build"
         environment:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
